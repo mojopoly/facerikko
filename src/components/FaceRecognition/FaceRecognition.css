@@ -1,0 +1,14 @@
+.bounding-box {
+  position: absolute;
+  box-shadow: 0 0 0 3px #149df2 inset;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  cursor: pointer;
+}
+.height-adj {
+  height: 510px;
+}
+.bio {
+  list-style-type: none;
+}
