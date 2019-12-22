@@ -19,7 +19,7 @@ const Form = ({btn, loadUser, onRouteChange}) => {
 
   const onSubmit = () => {
     if (btn === 'Sign In') {
-      fetch('https://facerikko.herokuapp.com/signin', {
+      fetch('http://facerikko.herokuapp.com/signin', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -36,7 +36,7 @@ const Form = ({btn, loadUser, onRouteChange}) => {
         })
         .catch(err => console.log(err));
     } else {
-      fetch('https://facerikko.herokuapp.com/signup', {
+      fetch('http://facerikko.herokuapp.com/signup', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({

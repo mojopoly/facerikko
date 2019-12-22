@@ -122,7 +122,7 @@ const App = () => {
   const onPictureSubmit = async () => {
     //console.log(user.id);
     await setImgUrl(input);
-    await fetch('https://facerikko.herokuapp.com/imageurl', {
+    await fetch('http://facerikko.herokuapp.com/imageurl', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -133,7 +133,7 @@ const App = () => {
       .then(
         async function(response) {
           if (response) {
-            await fetch('https://facerikko.herokuapp.com/image', {
+            await fetch('http://facerikko.herokuapp.com/image', {
               method: 'put',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({
