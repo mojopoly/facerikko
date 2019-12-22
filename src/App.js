@@ -9,17 +9,20 @@ import Signup from './components/Signup/Signup';
 import Particles from 'react-particles-js';
 import './App.css';
 import particlesOptions from './particleOptions';
-import Clarifai from 'clarifai';
-
-const app = new Clarifai.App({
-  apiKey: '39bd291741ad4003924b94e0b07084f3',
-});
 
 const App = () => {
   const [input, setInput] = useState('');
   const [imgUrl, setImgUrl] = useState('');
   const [route, setRoute] = useState('signin');
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState({
+    id: '',
+    name: '',
+    email: '',
+    password: '',
+    entries: 0,
+    joined: '',
+  });
   const [box, setBox] = useState({});
   const [age, setAge] = useState('');
   const [ageProb, setAgeProb] = useState('');
@@ -31,6 +34,17 @@ const App = () => {
   const [ethSecProb, setEthSecProb] = useState('');
   const [ethThird, setEthThird] = useState('');
   const [ethThirdProb, setEthThirdProb] = useState('');
+
+  const loadUser = data => {
+    setUser({
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      entries: data.entries,
+      joined: data.joined,
+    });
+  };
 
   const demographicData = data => {
     setAge(
@@ -105,28 +119,56 @@ const App = () => {
     setInput(e.target.value);
   };
 
-  const onButtonSubmit = () => {
-    setImgUrl(input);
-    app.models.predict(Clarifai.DEMOGRAPHICS_MODEL, input).then(
-      function(response) {
-        displayFaceBox(calculateFaceLocation(response));
-        demographicData(response);
-      },
-      function(err) {
-        console.log(err);
-      }
-    );
+  const onPictureSubmit = async () => {
+    //console.log(user.id);
+    await setImgUrl(input);
+    await fetch('http://localhost:3001/imageurl', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        input: input,
+      }),
+    })
+      .then(response => response.json())
+      .then(
+        async function(response) {
+          if (response) {
+            await fetch('http://localhost:3001/image', {
+              method: 'put',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                id: user.id,
+              }),
+            })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data);
+                setUser(Object.assign(user, {entries: data}));
+              })
+              .catch(console.log);
+          }
+          displayFaceBox(calculateFaceLocation(response));
+          demographicData(response);
+        },
+        function(err) {
+          console.log(err);
+        }
+      );
   };
 
   const onRouteChange = route => {
     if (route === 'signout') {
       setIsSignedIn(false);
+      setUser({});
+      setInput('');
+      setImgUrl('');
     } else if (route === 'home') {
       setIsSignedIn(true);
     }
     setRoute(route);
   };
 
+  //console.log(user);
   return (
     <div className="App">
       <Particles className="particles" params={particlesOptions} />
@@ -134,11 +176,11 @@ const App = () => {
       {route === 'home' ? (
         <React.Fragment>
           <Logo />
-          <Rank />
+          <Rank user={user} />
           <ImageLinkForm
             value={input}
             onInputChange={onInputChange}
-            onButtonSubmit={onButtonSubmit}
+            onPictureSubmit={onPictureSubmit}
           />
           <FaceRecognition
             faceBox={box}
@@ -156,9 +198,9 @@ const App = () => {
           />
         </React.Fragment>
       ) : route === 'signin' ? (
-        <Signin onRouteChange={onRouteChange} />
+        <Signin loadUser={loadUser} onRouteChange={onRouteChange} />
       ) : (
-        <Signup onRouteChange={onRouteChange} />
+        <Signup loadUser={loadUser} onRouteChange={onRouteChange} />
       )}
     </div>
   );
