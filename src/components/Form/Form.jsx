@@ -19,7 +19,7 @@ const Form = ({btn, loadUser, onRouteChange}) => {
 
   const onSubmit = () => {
     if (btn === 'Sign In') {
-      fetch('http://localhost:3001/signin', {
+      fetch('https://facerikko.herokuapp.com/signin', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -36,7 +36,7 @@ const Form = ({btn, loadUser, onRouteChange}) => {
         })
         .catch(err => console.log(err));
     } else {
-      fetch('http://localhost:3001/signup', {
+      fetch('https://facerikko.herokuapp.com/signup', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -54,10 +54,6 @@ const Form = ({btn, loadUser, onRouteChange}) => {
         });
     }
   };
-
-  // const onSubmitSignUp = () => {
-
-  // };
 
   return (
     <article className="br3 ba b--black-10 mv6 shadow-5 w-100 w-50-m w-50-l mw6 center">
