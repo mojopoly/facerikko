@@ -1,55 +1,55 @@
 import React, {useState} from 'react';
 
 const Form = ({btn, loadUser, onRouteChange}) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
+  const [name, setName] = useState ('');
+  const [email, setEmail] = useState ('');
+  const [pass, setPass] = useState ('');
 
   const onNameChange = event => {
-    setName(event.target.value);
+    setName (event.target.value);
   };
 
   const onEmailChange = event => {
-    setEmail(event.target.value);
+    setEmail (event.target.value);
   };
 
   const onPasswordChange = event => {
-    setPass(event.target.value);
+    setPass (event.target.value);
   };
 
   const onSubmit = () => {
     if (btn === 'Sign In') {
-      fetch('http://facerikko.herokuapp.com/signin', {
+      fetch ('https://facerikko.herokuapp.com/signin', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
+        body: JSON.stringify ({
           email: email,
           password: pass,
         }),
       })
-        .then(response => response.json())
-        .then(user => {
+        .then (response => response.json ())
+        .then (user => {
           if (user.id) {
-            loadUser(user);
-            onRouteChange('home');
+            loadUser (user);
+            onRouteChange ('home');
           }
         })
-        .catch(err => console.log(err));
+        .catch (err => console.log (err));
     } else {
-      fetch('http://facerikko.herokuapp.com/signup', {
+      fetch ('https://facerikko.herokuapp.com/signup', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
+        body: JSON.stringify ({
           name: name,
           password: pass,
           email: email,
         }),
       })
-        .then(response => response.json())
-        .then(user => {
+        .then (response => response.json ())
+        .then (user => {
           if (user.id) {
-            loadUser(user);
-            onRouteChange('home');
+            loadUser (user);
+            onRouteChange ('home');
           }
         });
     }
@@ -61,21 +61,21 @@ const Form = ({btn, loadUser, onRouteChange}) => {
         <div className="measure">
           <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
             <legend className="f1 fw6 ph0 mh0">{btn}</legend>
-            {btn === 'Sign Up' ? (
-              <div className="mt3">
-                <label className="db fw6 lh-copy f6" htmlFor="name">
-                  Name
-                </label>
-                <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={name}
-                  onChange={onNameChange}
-                />
-              </div>
-            ) : null}
+            {btn === 'Sign Up'
+              ? <div className="mt3">
+                  <label className="db fw6 lh-copy f6" htmlFor="name">
+                    Name
+                  </label>
+                  <input
+                    className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                    type="text"
+                    name="name"
+                    id="name"
+                    value={name}
+                    onChange={onNameChange}
+                  />
+                </div>
+              : null}
             <div className="mt3">
               <label className="db fw6 lh-copy f6" htmlFor="email-address">
                 Email
@@ -111,16 +111,16 @@ const Form = ({btn, loadUser, onRouteChange}) => {
               onClick={onSubmit}
             />
           </div>
-          {btn === 'Sign In' ? (
-            <div className="lh-copy mt3">
-              <p
-                onClick={() => onRouteChange('signup')}
-                className="f6 link dib black db grow link pointer"
-              >
-                Register
-              </p>
-            </div>
-          ) : null}
+          {btn === 'Sign In'
+            ? <div className="lh-copy mt3">
+                <p
+                  onClick={() => onRouteChange ('signup')}
+                  className="f6 link dib black db grow link pointer"
+                >
+                  Register
+                </p>
+              </div>
+            : null}
         </div>
       </main>
     </article>

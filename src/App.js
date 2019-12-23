@@ -11,11 +11,11 @@ import './App.css';
 import particlesOptions from './particleOptions';
 
 const App = () => {
-  const [input, setInput] = useState('');
-  const [imgUrl, setImgUrl] = useState('');
-  const [route, setRoute] = useState('signin');
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [user, setUser] = useState({
+  const [input, setInput] = useState ('');
+  const [imgUrl, setImgUrl] = useState ('');
+  const [route, setRoute] = useState ('signin');
+  const [isSignedIn, setIsSignedIn] = useState (false);
+  const [user, setUser] = useState ({
     id: '',
     name: '',
     email: '',
@@ -23,20 +23,20 @@ const App = () => {
     entries: 0,
     joined: '',
   });
-  const [box, setBox] = useState({});
-  const [age, setAge] = useState('');
-  const [ageProb, setAgeProb] = useState('');
-  const [genMas, setGenMas] = useState('');
-  const [genFem, setGenFem] = useState('');
-  const [ethFirst, setEthFirst] = useState('');
-  const [ethFirstProb, setEthFirstProb] = useState('');
-  const [ethSec, setEthSec] = useState('');
-  const [ethSecProb, setEthSecProb] = useState('');
-  const [ethThird, setEthThird] = useState('');
-  const [ethThirdProb, setEthThirdProb] = useState('');
+  const [box, setBox] = useState ({});
+  const [age, setAge] = useState ('');
+  const [ageProb, setAgeProb] = useState ('');
+  const [genMas, setGenMas] = useState ('');
+  const [genFem, setGenFem] = useState ('');
+  const [ethFirst, setEthFirst] = useState ('');
+  const [ethFirstProb, setEthFirstProb] = useState ('');
+  const [ethSec, setEthSec] = useState ('');
+  const [ethSecProb, setEthSecProb] = useState ('');
+  const [ethThird, setEthThird] = useState ('');
+  const [ethThirdProb, setEthThirdProb] = useState ('');
 
   const loadUser = data => {
-    setUser({
+    setUser ({
       id: data.id,
       name: data.name,
       email: data.email,
@@ -47,51 +47,51 @@ const App = () => {
   };
 
   const demographicData = data => {
-    setAge(
+    setAge (
       data.outputs[0].data.regions[0].data.face.age_appearance.concepts[0].name
     );
-    setAgeProb(
+    setAgeProb (
       data.outputs[0].data.regions[0].data.face.age_appearance.concepts[0]
         .value * 100
     );
     data.outputs[0].data.regions[0].data.face.gender_appearance.concepts[0]
       .name === 'masculine'
-      ? setGenMas(
+      ? setGenMas (
           data.outputs[0].data.regions[0].data.face.gender_appearance
             .concepts[0].value * 100
         )
-      : setGenFem(
+      : setGenFem (
           data.outputs[0].data.regions[0].data.face.gender_appearance
             .concepts[0].value * 100
         );
     data.outputs[0].data.regions[0].data.face.gender_appearance.concepts[1]
       .name === 'masculine'
-      ? setGenMas(
+      ? setGenMas (
           data.outputs[0].data.regions[0].data.face.gender_appearance
             .concepts[1].value * 100
         )
-      : setGenFem(
+      : setGenFem (
           data.outputs[0].data.regions[0].data.face.gender_appearance
             .concepts[1].value * 100
         );
-    setEthFirst(
-      data.outputs[0].data.regions[0].data.face.multicultural_appearance.concepts[0].name.toUpperCase()
+    setEthFirst (
+      data.outputs[0].data.regions[0].data.face.multicultural_appearance.concepts[0].name.toUpperCase ()
     );
-    setEthFirstProb(
+    setEthFirstProb (
       data.outputs[0].data.regions[0].data.face.multicultural_appearance
         .concepts[0].value * 100
     );
-    setEthSec(
-      data.outputs[0].data.regions[0].data.face.multicultural_appearance.concepts[1].name.toUpperCase()
+    setEthSec (
+      data.outputs[0].data.regions[0].data.face.multicultural_appearance.concepts[1].name.toUpperCase ()
     );
-    setEthSecProb(
+    setEthSecProb (
       data.outputs[0].data.regions[0].data.face.multicultural_appearance
         .concepts[1].value * 100
     );
-    setEthThird(
-      data.outputs[0].data.regions[0].data.face.multicultural_appearance.concepts[2].name.toUpperCase()
+    setEthThird (
+      data.outputs[0].data.regions[0].data.face.multicultural_appearance.concepts[2].name.toUpperCase ()
     );
-    setEthThirdProb(
+    setEthThirdProb (
       data.outputs[0].data.regions[0].data.face.multicultural_appearance
         .concepts[2].value * 100
     );
@@ -100,9 +100,9 @@ const App = () => {
   const calculateFaceLocation = data => {
     const clarifaiFace =
       data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById('inputImage');
-    const width = Number(image.width);
-    const height = Number(image.height);
+    const image = document.getElementById ('inputImage');
+    const width = Number (image.width);
+    const height = Number (image.height);
     return {
       leftCol: clarifaiFace.left_col * width,
       topRow: clarifaiFace.top_row * height,
@@ -112,60 +112,60 @@ const App = () => {
   };
 
   const displayFaceBox = box => {
-    setBox(box);
+    setBox (box);
   };
 
   const onInputChange = e => {
-    setInput(e.target.value);
+    setInput (e.target.value);
   };
 
   const onPictureSubmit = async () => {
     //console.log(user.id);
-    await setImgUrl(input);
-    await fetch('http://facerikko.herokuapp.com/imageurl', {
+    await setImgUrl (input);
+    await fetch ('https://facerikko.herokuapp.com/imageurl', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
+      body: JSON.stringify ({
         input: input,
       }),
     })
-      .then(response => response.json())
-      .then(
-        async function(response) {
+      .then (response => response.json ())
+      .then (
+        async function (response) {
           if (response) {
-            await fetch('http://facerikko.herokuapp.com/image', {
+            await fetch ('https://facerikko.herokuapp.com/image', {
               method: 'put',
               headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({
+              body: JSON.stringify ({
                 id: user.id,
               }),
             })
-              .then(response => response.json())
-              .then(data => {
-                console.log(data);
-                setUser(Object.assign(user, {entries: data}));
+              .then (response => response.json ())
+              .then (data => {
+                console.log (data);
+                setUser (Object.assign (user, {entries: data}));
               })
-              .catch(console.log);
+              .catch (console.log);
           }
-          displayFaceBox(calculateFaceLocation(response));
-          demographicData(response);
+          displayFaceBox (calculateFaceLocation (response));
+          demographicData (response);
         },
-        function(err) {
-          console.log(err);
+        function (err) {
+          console.log (err);
         }
       );
   };
 
   const onRouteChange = route => {
     if (route === 'signout') {
-      setIsSignedIn(false);
-      setUser({});
-      setInput('');
-      setImgUrl('');
+      setIsSignedIn (false);
+      setUser ({});
+      setInput ('');
+      setImgUrl ('');
     } else if (route === 'home') {
-      setIsSignedIn(true);
+      setIsSignedIn (true);
     }
-    setRoute(route);
+    setRoute (route);
   };
 
   //console.log(user);
@@ -173,35 +173,33 @@ const App = () => {
     <div className="App">
       <Particles className="particles" params={particlesOptions} />
       <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
-      {route === 'home' ? (
-        <React.Fragment>
-          <Logo />
-          <Rank user={user} />
-          <ImageLinkForm
-            value={input}
-            onInputChange={onInputChange}
-            onPictureSubmit={onPictureSubmit}
-          />
-          <FaceRecognition
-            faceBox={box}
-            image={imgUrl}
-            age={age}
-            ageProb={ageProb}
-            genMas={genMas}
-            genFem={genFem}
-            ethFirst={ethFirst}
-            ethFirstProb={ethFirstProb}
-            ethSec={ethSec}
-            ethSecProb={ethSecProb}
-            ethThird={ethThird}
-            ethThirdProb={ethThirdProb}
-          />
-        </React.Fragment>
-      ) : route === 'signin' ? (
-        <Signin loadUser={loadUser} onRouteChange={onRouteChange} />
-      ) : (
-        <Signup loadUser={loadUser} onRouteChange={onRouteChange} />
-      )}
+      {route === 'home'
+        ? <React.Fragment>
+            <Logo />
+            <Rank user={user} />
+            <ImageLinkForm
+              value={input}
+              onInputChange={onInputChange}
+              onPictureSubmit={onPictureSubmit}
+            />
+            <FaceRecognition
+              faceBox={box}
+              image={imgUrl}
+              age={age}
+              ageProb={ageProb}
+              genMas={genMas}
+              genFem={genFem}
+              ethFirst={ethFirst}
+              ethFirstProb={ethFirstProb}
+              ethSec={ethSec}
+              ethSecProb={ethSecProb}
+              ethThird={ethThird}
+              ethThirdProb={ethThirdProb}
+            />
+          </React.Fragment>
+        : route === 'signin'
+            ? <Signin loadUser={loadUser} onRouteChange={onRouteChange} />
+            : <Signup loadUser={loadUser} onRouteChange={onRouteChange} />}
     </div>
   );
 };
